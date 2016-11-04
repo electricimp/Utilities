@@ -185,7 +185,8 @@ utilities._extractUUID <- function(rs) {
     }
 }
 
-// ********** I2C Function **********
+// **********       I2C Function       **********
+// **********         Public           **********
 utilities.debugI2C <- function(i2c) {
     if (imp.environment() == ENVIRONMENT_AGENT) {
         server.error("utilities.debugI2C() can only be run on a device");
@@ -198,3 +199,21 @@ utilities.debugI2C <- function(i2c) {
         }
     }
 }
+
+// **********      Imp Functions       **********
+// **********         Public           **********
+utilities.impType <- function(rs = false) {
+    if (imp.environment() == ENVIRONMENT_AGENT) {
+        server.error("utilities.impType() can only be run on a device");
+        return;
+    }
+    
+    local di = hardware.getdeviceid();
+    local t = ("000" + imp.getmacaddress() == di.slice(1)) ? di.slice(0,1) : "1";
+    if (rs) {
+        return "imp00" + t + ((t == "4") ? "m" : "");
+    } else {
+        return t.tointeger();
+    }
+}
+
