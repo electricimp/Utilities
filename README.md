@@ -30,7 +30,7 @@ server.log(utilities.integerToHexString(78692));
 
 ### utilities.rnd(*max*)
 
-This funtion returns a random integer between 0 and *max*.
+This function returns a random integer between 0 and *max*.
 
 #### Example
 
@@ -41,7 +41,7 @@ local strikeSuccess = utilities.rnd(100);
 
 ### utilities.frnd(*max*)
 
-This funtion returns a random float between 0.0 and *max*.
+This function returns a random float between 0.0 and *max*.
 
 #### Example
 
@@ -107,7 +107,7 @@ if (utilities.dstCheck() && !utilities.bstCheck()) {
 
 ### utilities.getNewUUID(*callback*)
 
-This function generates a new UUID code via the webservice [uuidgenerator.net](https://www.uuidgenerator.net/). As such, it operates asynchronously and requires a callback function to be provided to accept the returned UUID. The callback should have two paramters: *err* and *uuid*. The first will be `null` if no error has occurred, otherwise it will contain an error message string. *uuid* will be requested UUID, or `null` if an error occurred.
+This function generates a new UUID code via the web service [uuidgenerator.net](https://www.uuidgenerator.net/). As such, it operates asynchronously and requires a callback function to be provided to accept the returned UUID. The callback should have two parameters: *err* and *uuid*. The first will be `null` if no error has occurred, otherwise it will contain an error message string. *uuid* will be requested UUID, or `null` if an error occurred.
 
 #### Example
 
@@ -134,7 +134,7 @@ utilities.debugI2C(hardware.i2c89);
 
 ### utilities.impType(*returnString*)
 
-This function returns the type of imp on which your code is running. The *returnString* parameter is a Boolean: pass in `true` to recieve the imp type as a printable string, eg. `"imp004m"`. If *returnString* is `false` (the default), the function returns an integer, eg. 1 for the imp001, 4 for the imp004m.
+This function returns the type of imp on which your code is running. The *returnString* parameter is a Boolean: pass in `true` to receive the imp type as a printable string, eg. `"imp004m"`. If *returnString* is `false` (the default), the function returns an integer, eg. 1 for the imp001, 4 for the imp004m.
 
 ## Improvements, Bug Fixes and Suggestions
 
