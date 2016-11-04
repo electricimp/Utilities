@@ -1,6 +1,8 @@
 # Utilities 1.0.0
 
-The library provides a set of handy and compact functions for Squirrel programmers. It is not implemented as a class, but all of the functions are namespaced to *utilities* (via a table) to avoid clashes with your code’s existing functions.
+This library provides a set of handy and compact functions for Squirrel programmers. It is not implemented as a class, but all of the functions are namespaced to *utilities* (via a table) to avoid clashes with your code’s existing functions.
+
+**To add this library to your project, add** `#require "Utilities.nut:1.0.0"` **to the top of your agent or device code.**
 
 ## Library Functions
 
@@ -10,7 +12,7 @@ This function evaluates the supplied hexadecimal string (eg. `0xFFA0`) and retur
 
 #### Example
 
-```
+```squirrel
 server.log(utilities.hexStringToInteger("0xFFFE"));
 // Displays '65534'
 ```
@@ -21,7 +23,7 @@ This function converts the supplied integer to a hexadecimal string.
 
 #### Example
 
-```
+```squirrel
 server.log(utilities.integerToHexString(78692));
 // Displays '0x13364'
 ```
@@ -32,7 +34,7 @@ This funtion returns a random integer between 0 and *max*.
 
 #### Example
 
-```
+```squirrel
 // Roll for a strike on d100
 local strikeSuccess = utilities.rnd(100);
 ```
@@ -43,7 +45,7 @@ This funtion returns a random float between 0.0 and *max*.
 
 #### Example
 
-```
+```squirrel
 server.log(utilities.frnd(100));
 ```
 
@@ -55,7 +57,7 @@ Numbers greater than 999 are separated with the symbol string passed into *separ
 
 #### Example
 
-```
+```squirrel
 server.log(utilities.numberFormatter("2000.099999", 2, ","));
 // Displays '2,000.10'
 ```
@@ -68,7 +70,7 @@ The returned integers lies in the range 0 to 6, where 0 is Sunday and 6 is Satur
 
 ### Example
 
-```
+```squirrel
 local days = ["Sunday", "Monday", "Tueday", "Wednesday", "Thursday", "Friday", "Saturday"];
 server.log("3 April 2011 was a " + days[utilities.dayOfWeek(3, 3, 2011)]);
 ```
@@ -83,7 +85,7 @@ This function returns `true` if the current date is within the British Summer Ti
 
 #### Example
 
-```
+```squirrel
 if (utilities.bstCheck()) {
     server.log("The UK is observing British Summer Time");
 } else {
@@ -97,7 +99,7 @@ This function returns `true` if the current date is within the North American Da
 
 #### Example
 
-```
+```squirrel
 if (utilities.dstCheck() && !utilities.bstCheck()) {
     server.log("The Los Altos folks will be an hour earlier");
 }
@@ -109,7 +111,7 @@ This function generates a new UUID code via the webservice [uuidgenerator.net](h
 
 #### Example
 
-```
+```squirrel
 utilities.getNewUUID(function(err, uuid) {
     if (err) {
         server.error(err);
@@ -125,7 +127,7 @@ This function logs all the devices (by 8-bit and 7-bit address) on the specified
 
 #### Example
 
-```
+```squirrel
 utilities.debugI2C(hardware.i2c89);
 // Displays 'Device at 8-bit address: 0xE0 (7-bit address: 0x70)'
 ```
