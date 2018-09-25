@@ -1,8 +1,8 @@
-# Utilities 1.0.0
+# Utilities 1.0.1
 
 This library provides a set of handy and compact functions for Squirrel programmers. It is not implemented as a class, but all of the functions are namespaced to *utilities* (via a table) to avoid clashes with your code’s existing functions.
 
-**To add this library to your project, add** `#require "Utilities.nut:1.0.0"` **to the top of your agent or device code.**
+**To add this library to your project, add** `#require "Utilities.nut:1.0.1"` **to the top of your agent or device code.**
 
 ## Library Functions
 
