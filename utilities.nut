@@ -162,23 +162,16 @@ utilities.getNewUUID <- function(cb = null) {
     }
 
     ::_uuidcb <- cb;
-    http.get("https://www.uuidgenerator.net/").sendasync(utilities._extractUUID);
+    http.get("https://www.uuidgenerator.net/api/version1").sendasync(utilities._extractUUID);
 }
 
 // **********         Private          **********
 utilities._extractUUID <- function(rs) {
-    local u = "";
+    // Handle the text returned by the API, https://www.uuidgenerator.net/api
+    // by TransparenTech LLC
     if (rs.statuscode == 200) {
         if (rs.body.len() > 0) {
-            for (local i = 0 ; i < (rs.body.len() - 15) ; ++i) {
-                local s = rs.body.slice(i, i + 15);
-                if (s == "h2 class=\"uuid\"") {
-                    u = rs.body.slice(i + 16, i + 52);
-                    break;
-                }
-            }
-
-            ::_uuidcb(null, u);
+            ::_uuidcb(null, rs.body);
         }
     } else {
         ::_uuidcb("Error connecting to or receiving data from UUID generator", null);
