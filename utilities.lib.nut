@@ -196,7 +196,7 @@ utilities._extractUUID <- function(rs) {
     // by TransparenTech LLC
     if (rs.statuscode == 200) {
         if (rs.body.len() > 0) {
-            ::_uuidcb(null, rs.body);
+            ::_uuidcb(null, rs.body.slice(0, 36));
         }
     } else {
         ::_uuidcb("Error connecting to or receiving data from UUID generator", null);
