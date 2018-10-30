@@ -25,7 +25,7 @@
 
 
 utilities <- {};
-utilities.version <- "1.1.0";
+utilities.version <- "2.0.0";
 
 // ********** Hex Conversion Functions **********
 // **********         Public           **********

@@ -1,8 +1,8 @@
-# Utilities 1.1.0 #
+# Utilities 2.0.0 #
 
 This library provides a set of handy and compact functions for Squirrel programmers. It is not implemented as a class, but all of the functions are namespaced to *utilities* (via a table) to avoid clashes with your code’s existing functions.
 
-**To include this library in your project, add** `#require "Utilities.lib.nut:1.1.0"` **to the top of your agent or device code.**
+**To include this library in your project, add** `#require "Utilities.lib.nut:2.0.0"` **to the top of your agent or device code.**
 
 ## Library Functions ##
 
@@ -13,6 +13,8 @@ This function evaluates the supplied hexadecimal string (eg. `0xFFA0`) and retur
 #### Example ####
 
 ```squirrel
+#require "Utilities.lib.nut:2.0.0"
+
 server.log(utilities.hexStringToInteger("0xFFFE"));
 // Displays '65534'
 ```
