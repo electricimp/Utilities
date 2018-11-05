@@ -183,16 +183,7 @@ utilities <- {
     // **********         Public           **********
 
     // We create this string here for later use, but only populte it if it is actually needed
-    "_UUIDbytesToHex" : "",
-
     "getNewUUID" : function() {
-        // Build an string of hex octets
-        if (utilities._UUIDbytesToHex.len() == 0) {
-            for (local i = 0 ; i < 256 ; i++) {
-                utilities._UUIDbytesToHex = utilities._UUIDbytesToHex + format("%02X", i);
-            }
-        }
-        
         // Randomize 16 bytes (128 bits)
         local rnds = blob(16);
         for (local i = 0 ; i < 16 ; i++) rnds.writen(((1.0 * math.rand() / RAND_MAX) * 256.0).tointeger(), 'b');
@@ -204,11 +195,7 @@ utilities <- {
         // Create an return the UUID string
         local s = "";
         for (local i = 0 ; i < 16 ; i++) {
-            if (rnds[i] < 0xFF) {
-                s = s + utilities._UUIDbytesToHex.slice(rnds[i] * 2 , (rnds[i] * 2) + 2); 
-            } else {
-                s = s + utilities._UUIDbytesToHex.slice(rnds[i] * 2);
-            }
+            s = s + format("%02X", rnds[i]);
             if (i == 3 || i == 5 || i == 7 || i == 9) s = s + "-";
         }
         return s;
