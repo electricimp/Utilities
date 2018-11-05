@@ -109,23 +109,18 @@ if (utilities.dstCheck() && !utilities.bstCheck()) {
 
 ### utilities.getNewUUID(*callback*) ###
 
-This function generates a new UUID code via the web service [uuidgenerator.net](https://www.uuidgenerator.net/). As such, it operates asynchronously and requires a callback function to be provided to accept the returned UUID. The callback should have two parameters: *err* and *uuid*. The first will be `null` if no error has occurred, otherwise it will contain an error message string. *uuid* will be requested UUID, or `null` if an error occurred.
+This function generates a new UUID code.
 
 #### Example ####
 
 ```squirrel
-utilities.getNewUUID(function(err, uuid) {
-    if (err) {
-        server.error(err);
-    } else {
-        server.log("UUID: " + uuid);
-    }
-});
+server.log(utilities.getNewUUID();
+// Logs, for example, 52473CFA-ACB1-4978-831F-1B1A74A2E265
 ```
 
 ### utilities.debugI2C(*impI2Cbus*) ###
 
-This function logs all the devices (by 8-bit and 7-bit address) on the specified imp I&sup2;C bus.
+This function logs all the devices (by 8-bit and 7-bit address) on the specified imp I&sup2;C bus. This function is only available to devices, not agents.
 
 #### Example ####
 
@@ -136,7 +131,7 @@ utilities.debugI2C(hardware.i2c89);
 
 ### utilities.impType(*returnString*) ###
 
-This function returns the type of imp on which your code is running. The *returnString* parameter is a Boolean: pass in `true` to receive the imp type as a printable string, eg. `"imp004m"`. If *returnString* is `false` (the default), the function returns an integer, eg. 1 for the imp001, 4 for the imp004m.
+This function returns the type of imp on which your code is running. The *returnString* parameter is a Boolean: pass in `true` to receive the imp type as a printable string, eg. `"imp004m"`. If *returnString* is `false` (the default), the function returns an integer, eg. 1 for the imp001, 4 for the imp004m.  This function is only available to devices, not agents.
 
 ## Improvements, Bug Fixes and Suggestions ##
 
