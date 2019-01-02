@@ -107,14 +107,14 @@ if (utilities.dstCheck() && !utilities.bstCheck()) {
 }
 ```
 
-### utilities.getNewUUID(*callback*) ###
+### utilities.getNewUUID() ###
 
 This function generates a new UUID code.
 
 #### Example ####
 
 ```squirrel
-server.log(utilities.getNewUUID();
+server.log(utilities.getNewUUID());
 // Logs, for example, 52473CFA-ACB1-4978-831F-1B1A74A2E265
 ```
 
