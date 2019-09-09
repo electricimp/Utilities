@@ -1,8 +1,8 @@
-# utilities 2.0.0 #
+# utilities 3.0.0 #
 
 This library provides a set of handy and compact functions for Squirrel programmers. It is not implemented as a class, but all of the functions are namespaced to *utilities* (via a table) to avoid clashes with your code’s existing functions.
 
-**To include this library in your project, add** `#require "utilities.lib.nut:2.0.0"` **to the top of your agent or device code.**
+**To include this library in your project, add** `#require "utilities.lib.nut:3.0.0"` **to the top of your agent or device code.**
 
 ## Library Functions ##
 
@@ -13,7 +13,7 @@ This function evaluates the supplied hexadecimal string (eg. `0xFFA0`) and retur
 #### Example ####
 
 ```squirrel
-#require "Utilities.lib.nut:2.0.0"
+#require "Utilities.lib.nut:3.0.0"
 
 server.log(utilities.hexStringToInteger("0xFFFE"));
 // Displays '65534'
@@ -118,24 +118,13 @@ server.log(utilities.getNewUUID());
 // Logs, for example, 52473CFA-ACB1-4978-831F-1B1A74A2E265
 ```
 
-### utilities.debugI2C(*impI2Cbus*) ###
-
-This function logs all the devices (by 8-bit and 7-bit address) on the specified imp I&sup2;C bus. This function is only available to devices, not agents.
-
-#### Example ####
-
-```squirrel
-utilities.debugI2C(hardware.i2c89);
-// Displays 'Device at 8-bit address: 0xE0 (7-bit address: 0x70)'
-```
-
 ### utilities.impType(*returnString*) ###
 
 This function returns the type of imp on which your code is running. The *returnString* parameter is a Boolean: pass in `true` to receive the imp type as a printable string, eg. `"imp004m"`. If *returnString* is `false` (the default), the function returns an integer, eg. 1 for the imp001, 4 for the imp004m.  This function is only available to devices, not agents.
 
 ## Improvements, Bug Fixes and Suggestions ##
 
-Please submit pull requests to the Develop branch.
+Please submit pull requests to the `develop` branch.
 
 ## Licence ##
 

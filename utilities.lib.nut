@@ -1,20 +1,20 @@
-// 
+//
 // Utilities.lib.nut
-// 
+//
 // MIT License
-// 
-// Copyright (c) 2016-18 Electric Imp
-// 
+//
+// Copyright (c) 2016-19 Electric Imp
+//
 // Permission is hereby granted, free of charge, to any person obtaining a copy
 // of this software and associated documentation files (the "Software"), to deal
 // in the Software without restriction, including without limitation the rights
 // to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 // copies of the Software, and to permit persons to whom the Software is
 // furnished to do so, subject to the following conditions:
-// 
+//
 // The above copyright notice and this permission notice shall be included in all
 // copies or substantial portions of the Software.
-// 
+//
 // THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 // IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
 // FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
@@ -26,7 +26,7 @@
 
 utilities <- {
 
-    "VERSION" : "2.0.0",
+    "VERSION" : "3.0.0",
 
     // HEX CONVERSION FUNCTIONS
 
@@ -201,23 +201,12 @@ utilities <- {
         return s;
     },
 
-    // **********       I2C Function       **********
-    // **********         Public           **********
-    "debugI2C" : function(i2c) {
-        // NOTE This is ONLY available on the the device
-        if (imp.environment() == ENVIRONMENT_AGENT) throw "utilities.debugI2C() can only be run on a device";
-        
-        for (local i = 2 ; i < 256 ; i += 2) {
-            if (i2c.read(i, "", 1) != null) server.log(format("Device at 8-bit address: 0x%02X (7-bit address: 0x%02X)", i, (i >> 1)));
-        }
-    },
-
     // **********      Imp Functions       **********
     // **********         Public           **********
     "impType" : function(returnAsString = false) {
         // NOTE This is ONLY available on the the device
         if (imp.environment() == ENVIRONMENT_AGENT) throw "utilities.impType() can only be run on a device";
-        
+
         local did = hardware.getdeviceid();
         local type = ("000" + imp.getmacaddress() == did.slice(1)) ? did.slice(0,1) : "1";
         if (returnAsString) {
