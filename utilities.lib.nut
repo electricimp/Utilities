@@ -155,7 +155,7 @@ utilities <- {
      * @returns {string} The string representation
      *
      */
-    "printblob" : function(ab) {
+    "printBlob" : function(ab) {
         local op = "";
         foreach (by in ab) {
             if (by < 32 || by > 127) {
@@ -390,8 +390,9 @@ utilities <- {
     // **********      Imp Functions       **********
     // **********         Public           **********
     "impType" : function(returnAsString = false) {
-        // NOTE This is ONLY available on the the device
-        if (imp.environment() == ENVIRONMENT_AGENT) return 0;
+        if (imp.environment() == ENVIRONMENT_AGENT) {
+            return (returnAsString ? "agent" : 0);
+        }
 
         local did = hardware.getdeviceid();
         local type = ("000" + imp.getmacaddress() == did.slice(1)) ? did.slice(0,1) : "1";

@@ -90,8 +90,7 @@ String &mdash; The hex string evaluation of the blob.
 ```squirrel
 local b = blob();
 b.writestring("ABCDEF");
-utilities.blobToHexString("0xFFFE");
-server.log(b.len());
+utilities.blobToHexString(b);
 // Displays '0x414243444546'
 
 server.log(utilities.blobToHexString(b, 4));
