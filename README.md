@@ -2,6 +2,8 @@
 
 This library provides a set of handy and compact functions for Squirrel programmers. It is not implemented as a class, but all of the functions are namespaced to *utilities* (via a table) to avoid clashes with your code’s existing functions.
 
+View library release notes [here](#release-notes).
+
 **To include this library in your project, add** `#require "utilities.lib.nut:3.0.0"` **to the top of your agent or device code.**
 
 ## Conversion Functions ##
@@ -90,7 +92,7 @@ String &mdash; The hex string evaluation of the blob.
 ```squirrel
 local b = blob();
 b.writestring("ABCDEF");
-utilities.blobToHexString(b);
+server.log(utilities.blobToHexString(b));
 // Displays '0x414243444546'
 
 server.log(utilities.blobToHexString(b, 4));
@@ -121,7 +123,7 @@ server.log(utilities.binaryToInteger("10000000111100001111000011110000"));
 // Displays '-2131693328'
 ```
 
-### utilities.printblob(*aBlob*) ###
+### utilities.printBlob(*aBlob*) ###
 
 This function provides a printable representation of a blob. Bytes are presented as Ascii characters; byte values outside the Ascii range are presented as hexadecimal values in square brackets.
 
@@ -140,11 +142,11 @@ String &mdash; The printable string.
 ```squirrel
 local b = blob();
 b.writestring("ABCDEF");
-server.log(utilities.printblob(b));
+server.log(utilities.printBlob(b));
 // Displays 'ABCDEF'
 
 local b = blob(6);
-server.log(utilities.printblob(b));
+server.log(utilities.printBlob(b));
 // Displays '[00][00][00][00][00][00]'
 ```
 
@@ -371,6 +373,18 @@ server.log(utilities.impType());
 server.log(utilities.impType(true));
 // Displays, eg. 'imp004m'
 ```
+
+## Release Notes ##
+
+- 3.0.0
+    - Remove *debugI2C()* function.
+    - Add *hexStringToBlob()*, *blobToHexString()*, *binaryToInteger()*, *printBlob()* and *sign()* functions.
+    - Revise documentation.
+    - Add test case.
+- 2.0.0
+    - Improve UUID code.
+- 1.0.0
+    - Initial release.
 
 ## Improvements, Bug Fixes and Suggestions ##
 
