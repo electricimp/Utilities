@@ -4,7 +4,7 @@ This library provides a set of handy and compact functions for Squirrel programm
 
 View library release notes [here](#release-notes).
 
-**To include this library in your project, add** `#require "utilities.lib.nut:3.0.0"` **to the top of your agent or device code.**
+**To include this library in your project, add** `#require "utilities.lib.nut:3.0.0"` **at the top of your agent or device code.**
 
 ## Conversion Functions ##
 
@@ -377,10 +377,10 @@ server.log(utilities.impType(true));
 ## Release Notes ##
 
 - 3.0.0
-    - Remove *debugI2C()* function.
-    - Add *hexStringToBlob()*, *blobToHexString()*, *binaryToInteger()*, *printBlob()* and *sign()* functions.
-    - Revise documentation.
-    - Add test case.
+    - Removed *debugI2C()* function.
+    - Added *hexStringToBlob()*, *blobToHexString()*, *binaryToInteger()*, *printBlob()* and *sign()* functions.
+    - Revised documentation.
+    - Added test case.
 - 2.0.0
     - Improve UUID code.
 - 1.0.0
