@@ -6,9 +6,10 @@ class UtilsTestCase extends ImpTestCase {
 
         return Promise(function(resolve, reject) {
 
+            // The result value
             local result = false;
 
-            // Run the tests
+            // The tests
             result = (utilities.hexStringToInteger("0xFFFE") == 65534);
             if (!result) reject();
 
@@ -24,6 +25,9 @@ class UtilsTestCase extends ImpTestCase {
             result = (utilities.blobToHexString(b) == "0x414243444546");
             if (!result) reject();
 
+            result = (utilities.blobToHexString(b, 4) == "x004100420043004400450046");
+            if (!result) reject();
+
             result = (utilities.binaryToInteger("111100001111000011110000") == 15790320);
             if (!result) reject();
 
@@ -33,12 +37,19 @@ class UtilsTestCase extends ImpTestCase {
             result = (utilities.printBlob(b) == "ABCDEF");
             if (!result) reject();
 
+            result = (utilities.printBlob(blob(6)) == "[00][00][00][00][00][00]");
+            if (!result) reject();
+
             local r = utilities.rnd(100);
             result = (r >= 0 && r <= 100);
             if (!result) reject();
 
             local v = 42;
             result = (utilities.sign(v) == 1);
+            if (!result) reject();
+
+            v = -42;
+            result = (utilities.sign(v) == -1);
             if (!result) reject();
 
             result = (utilities.numberFormatter("2000.099999", 2, ",") == "2,000.10");
@@ -51,7 +62,9 @@ class UtilsTestCase extends ImpTestCase {
             result = utilities.isLeapYear(2020);
             if (!result) reject();
 
+            // All tests passed, so resolve
             resolve();
+
         }.bindenv(this));
     }
 }
