@@ -1,4 +1,4 @@
-@include "github:electricimp/utilities/utilities.lib.nut"
+@include "github:electricimp/utilities/utilities.lib.nut@develop"
 
 class UtilsTestCase extends ImpTestCase {
 
