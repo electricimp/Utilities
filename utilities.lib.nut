@@ -1,38 +1,47 @@
-// 
-// Utilities.lib.nut
-// 
-// MIT License
-// 
-// Copyright (c) 2016-18 Electric Imp
-// 
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
-// 
-// The above copyright notice and this permission notice shall be included in all
-// copies or substantial portions of the Software.
-// 
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-// SOFTWARE.
-
-
+/**
+ * General utility functions accessed via the table 'utilities'.
+ *
+ * @author    Tony Smith (@smittytone)
+ * @licence   MIT
+ * @version   3.0.0
+ *
+ * @table
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ */
 utilities <- {
 
-    "VERSION" : "2.0.0",
+    // ********** Conversion Functions **********
 
-    // HEX CONVERSION FUNCTIONS
-
-    // ********** Hex Conversion Functions **********
-    // **********         Public           **********
+    /**
+     * Convert a hex string (with or without '0x' prefix) to an integer.
+     *
+     * @param {string} hs - The hex string
+     *
+     * @returns {integer} The value of the hex string
+     *
+     */
     "hexStringToInteger" : function(hs) {
+        // Check input string type
+        if (typeof hs != "string") throw "utilities.hexStringToInteger() requires a string";
+        hs = hs.tolower();
         if (hs.slice(0, 2) == "0x") hs = hs.slice(2);
         local i = 0;
         foreach (c in hs) {
@@ -43,38 +52,185 @@ utilities <- {
         return i;
     },
 
-    "integerToHexString" : function (i, r = 2) {
-        if (r % 2 != 0) r++;
-        local fs = "0x%0" + r.tostring() + "x";
+    /**
+     * Convert a decimal integer into a hex string.
+     *
+     * @param {integer} i   - The integer
+     * @param {integer} [n] - The number of characters in the hex string. Default: 2
+     *
+     * @returns {string} The hex string representation
+     *
+     */
+    "integerToHexString" : function (i, n = 2) {
+        if (typeof i != "integer") throw "utilities.integerToHexString() requires an integer";
+        if (n % 2 != 0) n++;
+        local fs = "0x%0" + n.tostring() + "x";
         return format(fs, i);
     },
 
-    // ********** Random Number Functions  **********
-    // **********         Public           **********
-    "frnd" : function(m) {
-        // Return a pseudorandom float between 0 and max, inclusive
-        return (1.0 * math.rand() / RAND_MAX) * (m + 1);
+    /**
+     * Convert a hex string (with or without '0x' prefix) to a blob.
+     *
+     * @param {string} hs - The hex string
+     *
+     * @returns {blob} A blob in which each octet of the hex is saved as a byte value
+     *
+     */
+    "hexStringToBlob" : function(hs) {
+        // Check input string type
+        if (typeof hs != "string") throw "utilities.hexStringToBlob() requires a string";
+        hs = hs.tolower();
+        if (hs.slice(0, 2) == "0x") hs = hs.slice(2);
+        if (hs.len() % 2 != 0) hs = "0" + hs;
+        local l = hs.len() / 2;
+        local r = blob(l);
+        for (local i = 0 ; i < l ; i++) {
+            local hi = hs[i * 2] - '0';
+            if (hi > 9) hi = ((hi & 0x1F) - 7);
+            local lo = hs[i * 2 + 1] - '0';
+            if (lo > 9) lo = ((lo & 0x1F) - 7);
+            r[i] = hi << 4 | lo;
+        }
+        return r;
     },
 
+    /**
+     * Convert a blob (array of bytes) to a hex string.
+     *
+     * @param {integer} b   - The blob
+     * @param {integer} [n - The number of characters assigned to each byte in the hex string. Default: 2
+     *
+     * @returns {string} The hex string representation
+     *
+     */
+    "blobToHexString" : function (b, n = 2) {
+        // Check input type
+        if (typeof b != "blob") throw "utilities.blobToHexString() requires a blob";
+        if (b.len() == 0) throw "utilities.blobToHexString() requires a non-zero blob";
+        local s = "0x";
+        if (n % 2 != 0) n++;
+        if (n < 2) n = 2;
+        local fs = "%0" + n.tostring() + "x";
+        for (local i = 0 ; i < b.len() ; i++) s += format(fs, b[i]);
+        return s;
+    },
+
+    /**
+     * Convert a string representation of a binary number to an integer.
+     *
+     * @param {string} b - The binary string, eg. "001001001", up to 32 bits in length
+     *
+     * @returns {integer} The decimal integer value of the binary representation
+     *
+     */
+    "binaryToInteger" : function(b) {
+        // Check input string ranges, type
+        if (typeof b != "string") throw "utilities.binaryToInteger() requires the binary value as a string";
+        if (b.len() > 32) throw "utilities.binaryToInteger() can only convert up to 32 bits";
+        if (b.len() == 0) return 0;
+
+        // Pad with initial zeros to the next full byte
+        if (b.len() % 8 != 0) {
+            local a = b.len();
+            while (a % 8 != 0) {
+                b = "0" + b;
+                a++;
+            }
+        }
+
+        local v = 0;
+        local a = b.len() - 1;
+        for (local i = 0 ; i < b.len() ; i++) {
+            if (b[a - i] == 49) v += (1 << i);
+        }
+
+        return v;
+    },
+
+    /**
+     * Create a print-suitable string from a blob.
+     *
+     * @param {integer} ab - The blob
+     *
+     * @returns {string} The string representation
+     *
+     */
+    "printBlob" : function(ab) {
+        local op = "";
+        foreach (by in ab) {
+            if (by < 32 || by > 127) {
+                op += ("[" + format("%02X", by) + "]");
+            } else {
+                op += by.tochar();
+            }
+        }
+        return op;
+    },
+
+    // ********** Random Number and Numerical Functions **********
+
+    /**
+     * Return a random floating point number between 0.0 and m, inclusive.
+     *
+     * @param {integer} m The maximum value
+     *
+     * @returns {integer} The random float
+     *
+     */
+    "frnd" : function(m) {
+        return (1.0 * (m + 1.0) * math.rand() / RAND_MAX) ;
+    },
+
+    /**
+     * Return a random integer between 0 and m, inclusive.
+     *
+     * @param {integer} m The maximum value
+     *
+     * @returns {integer} The random integer
+     *
+     */
     "rnd" : function(m) {
-        // Return a pseudorandom integer between 0 and max, inclusive
         return utilities.frnd(m).tointeger();
     },
 
-    // ********** Number Format Functions  **********
-    // **********         Public           **********
+    /**
+     * Indicates the sign of a signed integer or float.
+     *
+     * @param {integer|float} v - The number
+     *
+     * @returns {integer} -1 if the number is negative, 1 if the number is positive, or 0
+     *
+     */
+    "sign": function(v) {
+        if (typeof v != "integer" && typeof v != "float") throw "?TYPE MISMATCH ERROR";
+        if (v < 0) return -1;
+        if (v > 0) return 1;
+        return 0;
+    },
+
+    /**
+     * Return a string representation of a number with the specified decimal places (irrespective of type)
+     * and the desired hundreds separator (or none if you pass an empty string).
+     *
+     * @param {integer|float|string} n   - The number to represent
+     * @param {integer}              [d] - The number of decimal places for floats. Default: 2 for float; 0 for other types
+     * @param {string}               [s] - A hundreds separator character. Default: ","
+     *
+     * @returns {string} The formatted representation
+     *
+     */
     "numberFormatter" : function(n, d = null, s = ",") {
         if (d == null) {
             if (typeof n == "string") d = 0;
             else if (typeof n == "integer") d = 0;
             else if (typeof n == "float") d = 2;
-            else return n;
+            else throw "utilities.numberFormatter() invalid input"
         }
 
         if (typeof n == "string") {
             n = d == 0 ? n.tointeger() : n.tofloat();
         } else if (typeof n != "integer" && typeof n != "float") {
-            return n;
+            throw "utilities.numberFormatter() invalid input"
         }
 
         local ns = 0;
@@ -97,34 +253,61 @@ utilities <- {
 
             if ((ns - i) % 3 == 1) nn += s;
         }
-
         return nn;
     },
 
-    // **********    Calendar Functions    **********
-    // **********         Public           **********
-    "dayOfWeek" : function(d, m, y) {
-        local dim = [
-            [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31],
-            [31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        ];
+    // ********** Calendar Functions **********
 
-        local ad = ((y - 1) * 365) + utilities._totalLeapDays(y) + d - 5;
-        for (local i = 0 ; i < m ; i++) {
-            local a = dim[utilities._isLeapYear(y)];
-            ad = ad + a[i];
-        }
-        return (ad % 7) - 1;
+    /**
+     * Returns the day of the the week for a specific date.
+     *
+     * @param {integer} d - The day value (1-31)
+     * @param {integer} m - The month value (1-12)
+     * @param {integer} y - The four-digit year (eg. 2019)
+     *
+     * @returns {integer} The day of the week (0-6; Sun-Sat)
+     *
+     */
+    "dayOfWeek" : function(d, m, y) {
+        // Use Zeller's Rule (see http://mathforum.org/dr.math/faq/faq.calendar.html)
+        m -= 2;
+        if (m < 1) m += 12;
+        local e = y.tostring().slice(2).tointeger();
+        local s = y.tostring().slice(0,2).tointeger();
+        local t = m > 10 ? e - 1 : e;
+        local f = d + ((13 * m - 1) / 5) + t + (t / 4) + (s / 4) - (2 * s);
+        f = f % 7;
+        if (f < 0) f += 7;
+        return f;
     },
 
+/**
+     * Indicates whether a specified year was a leap year.
+     *
+     * @param {integer} y - The four-digit year (eg. 2019)
+     *
+     * @returns {bool} Whether the year was a leap year (true) or not (false)
+     *
+     */
     "isLeapYear" : function(y) {
-        if (utilities._isLeapYear(y) == 1) return true;
+        if ((y % 4 == 0) && ((y % 100 > 0) || (y % 400 == 0))) return true;
         return false;
     },
 
+    /**
+     * Checks a date for British Summer Time.
+     *
+     * @param {table} [n] - A Squirrel date table (see date()). Default: the current date and time
+     *
+     * @returns {bool} Whether the date is within the British Summer Time (BST) period (true), or not (false)
+     *
+     */
+    "isBST": function(n = null) {
+        return bstCheck(n);
+    },
+
     "bstCheck" : function(n = null) {
-        // Checks the current date for British Summer Time,
-        // returning true or false accordingly
+        //
         if (n == null) n = date();
         if (n.month > 2 && n.month < 9) return true;
 
@@ -144,6 +327,18 @@ utilities <- {
         return false;
     },
 
+    /**
+     * Checks a date for US Daylight Savings Time.
+     *
+     * @param {table} [n] - A Squirrel date table (see date()). Default: the current date and time
+     *
+     * @returns {bool} Whether the date is within the US Daylight Savings Time (DST) period (true), or not (false)
+     *
+     */
+    "isDST": function(n = null) {
+        return dstCheck(n);
+    },
+
     "dstCheck" : function(n = null) {
         // Checks the current date for US Daylight Savings Time, returning true or false accordingly
         if (n == null) n = date();
@@ -151,14 +346,14 @@ utilities <- {
 
         if (n.month == 2) {
             // DST starts second Sunday in March
-            for (local i = 8 ; i < 15 ; ++i) {
+            for (local i = 8 ; i < 15 ; i++) {
                 if (utilities.dayOfWeek(i, 2, n.year) == 0 && n.day >= i) return true;
             }
         }
 
         if (n.month == 10) {
             // DST ends first Sunday in November
-            for (local i = 1 ; i < 8 ; ++i) {
+            for (local i = 1 ; i < 8 ; i++) {
                 if (utilities.dayOfWeek(i, 10, n.year) == 0 && n.day <= i) return true;
             }
         }
@@ -166,27 +361,18 @@ utilities <- {
         return false;
     },
 
-    // **********         Private         **********
-    "_totalLeapDays" : function(y) {
-        local t = y / 4;
-        if (utilities._isLeapYear(y) == 1) t = t - 1;
-        t = t - ((y / 100) - (1752 / 100)) + ((y / 400) - (1752 / 400));
-        return t;
-    },
+    // ********** UUID Generator Functions **********
 
-    "_isLeapYear" : function(y) {
-        if ((y % 400) || ((y % 100) && !(y % 4))) return 1;
-        return 0;
-    },
-
-    // **********  UUID Accessor Function  **********
-    // **********         Public           **********
-
-    // We create this string here for later use, but only populte it if it is actually needed
+    /**
+     * Returns a valid UUID.
+     *
+     * @returns {string} The UUID
+     *
+     */
     "getNewUUID" : function() {
         // Randomize 16 bytes (128 bits)
         local rnds = blob(16);
-        for (local i = 0 ; i < 16 ; i++) rnds.writen(((1.0 * math.rand() / RAND_MAX) * 256.0).tointeger(), 'b');
+        for (local i = 0 ; i < 16 ; i++) rnds.writen((256.0 * math.rand() / RAND_MAX).tointeger(), 'b');
 
         // Adjust certain bits according to RFC 4122 section 4.4
         rnds[6] = 0x40 | (rnds[6] & 0x0F);
@@ -201,23 +387,13 @@ utilities <- {
         return s;
     },
 
-    // **********       I2C Function       **********
-    // **********         Public           **********
-    "debugI2C" : function(i2c) {
-        // NOTE This is ONLY available on the the device
-        if (imp.environment() == ENVIRONMENT_AGENT) throw "utilities.debugI2C() can only be run on a device";
-        
-        for (local i = 2 ; i < 256 ; i += 2) {
-            if (i2c.read(i, "", 1) != null) server.log(format("Device at 8-bit address: 0x%02X (7-bit address: 0x%02X)", i, (i >> 1)));
-        }
-    },
-
     // **********      Imp Functions       **********
     // **********         Public           **********
     "impType" : function(returnAsString = false) {
-        // NOTE This is ONLY available on the the device
-        if (imp.environment() == ENVIRONMENT_AGENT) throw "utilities.impType() can only be run on a device";
-        
+        if (imp.environment() == ENVIRONMENT_AGENT) {
+            return (returnAsString ? "agent" : 0);
+        }
+
         local did = hardware.getdeviceid();
         local type = ("000" + imp.getmacaddress() == did.slice(1)) ? did.slice(0,1) : "1";
         if (returnAsString) {
