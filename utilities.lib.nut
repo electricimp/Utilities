@@ -3,7 +3,7 @@
  *
  * @author    Tony Smith (@smittytone)
  * @licence   MIT
- * @version   3.0.0
+ * @version   3.0.1
  *
  * @table
  *
@@ -314,14 +314,17 @@ utilities <- {
         if (n.month == 2) {
             // BST starts on the last Sunday of March
             for (local i = 31 ; i > 24 ; i--) {
-                if (utilities.dayOfWeek(i, 2, n.year) == 0 && n.day >= i) return true;
+                // NOTE 'utilities.dayOfWeek()' uses months in range 1-12, but
+                //       'bstCheck()', like Squirrel date() uses the range 0-11
+                if (utilities.dayOfWeek(i, 3, n.year) == 0 && n.day >= i) return true;
             }
         }
 
         if (n.month == 9) {
             // BST ends on the last Sunday of October
             for (local i = 31 ; i > 24 ; i--) {
-                if (utilities.dayOfWeek(i, 9, n.year) == 0 && n.day < i) return true;
+                // See NOTE above
+                if (utilities.dayOfWeek(i, 10, n.year) == 0 && n.day < i) return true;
             }
         }
         return false;
@@ -347,14 +350,17 @@ utilities <- {
         if (n.month == 2) {
             // DST starts second Sunday in March
             for (local i = 8 ; i < 15 ; i++) {
-                if (utilities.dayOfWeek(i, 2, n.year) == 0 && n.day >= i) return true;
+                // NOTE 'utilities.dayOfWeek()' uses months in range 1-12, but
+                //       'dstCheck()', like Squirrel date() uses the range 0-11
+                if (utilities.dayOfWeek(i, 3, n.year) == 0 && n.day >= i) return true;
             }
         }
 
         if (n.month == 10) {
             // DST ends first Sunday in November
             for (local i = 1 ; i < 8 ; i++) {
-                if (utilities.dayOfWeek(i, 10, n.year) == 0 && n.day <= i) return true;
+                // See NOTE above
+                if (utilities.dayOfWeek(i, 11, n.year) == 0 && n.day <= i) return true;
             }
         }
 

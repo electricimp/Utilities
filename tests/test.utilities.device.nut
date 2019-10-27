@@ -62,6 +62,10 @@ class UtilsTestCase extends ImpTestCase {
             result = utilities.isLeapYear(2020);
             if (!result) reject("utilities.isLeapYear");
 
+            local testDate = { "month" : 10, "year" : 2019, "day" : 28 };
+            result = utilities.isBST(testDate);
+            if (result) reject("utilities.isBST/bstCheck");
+
             // All tests passed, so resolve
             resolve();
 

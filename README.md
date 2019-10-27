@@ -1,10 +1,10 @@
-# utilities 3.0.0 #
+# utilities 3.0.1 #
 
 This library provides a set of handy and compact functions for Squirrel programmers. It is not implemented as a class, but all of the functions are namespaced to *utilities* (via a table) to avoid clashes with your code’s existing functions.
 
 View library release notes [here](#release-notes).
 
-**To include this library in your project, add** `#require "utilities.lib.nut:3.0.0"` **at the top of your agent or device code.**
+**To include this library in your project, add** `#require "utilities.lib.nut:3.0.1"` **at the top of your agent or device code.**
 
 ## Conversion Functions ##
 
@@ -293,7 +293,7 @@ This function indicates whether the supplied date lies within the British Summer
 
 | Parameter | Type | Required? | Description |
 | --- | --- | --- | --- |
-| *date* | Squirrel *date()* Table | No | A date. Default: the current date and time |
+| *date* | Squirrel *date()* Table | No | A date as per Squirrel’s *date()* function. Default: the current date and time |
 
 #### Returns ####
 
@@ -317,7 +317,7 @@ This function indicates whether the supplied date lies within North American Day
 
 | Parameter | Type | Required? | Description |
 | --- | --- | --- | --- |
-| *date* | Squirrel *date()* Table | No | A date. Default: the current date and time |
+| *date* | Squirrel *date()* Table | No | A date as per Squirrel’s *date()* function. Default: the current date and time |
 
 #### Returns ####
 
@@ -376,6 +376,8 @@ server.log(utilities.impType(true));
 
 ## Release Notes ##
 
+- 3.0.1
+    - Fixed an issue causing incorrect BST/DST reporting (mismatch in numeric month values across functions).
 - 3.0.0
     - Removed *debugI2C()* function.
     - Added *hexStringToBlob()*, *blobToHexString()*, *binaryToInteger()*, *printBlob()* and *sign()* functions.
