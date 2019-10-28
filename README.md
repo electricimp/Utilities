@@ -6,6 +6,8 @@ View library release notes [here](#release-notes).
 
 **To include this library in your project, add** `#require "utilities.lib.nut:3.0.1"` **at the top of your agent or device code.**
 
+![Build Status](https://cse-ci.electricimp.com/app/rest/builds/buildType:(id:Utilities_BuildAndTest)/statusIcon)
+
 ## Conversion Functions ##
 
 ### utilities.hexStringToInteger(*hexString*) ###
