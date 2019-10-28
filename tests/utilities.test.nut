@@ -1,6 +1,6 @@
 @include "github:electricimp/utilities/utilities.lib.nut@develop"
 
-class UtilsTestCase extends ImpTestCase {
+class UtilitiesTestCase extends ImpTestCase {
 
     function tests() {
 
@@ -65,6 +65,15 @@ class UtilsTestCase extends ImpTestCase {
             local testDate = { "month" : 10, "year" : 2019, "day" : 28 };
             result = utilities.isBST(testDate);
             if (result) reject("utilities.isBST/bstCheck");
+
+            // ********** IMPORTANT **********
+            // Make sure the following comparisons are set for your test imp
+            // Check 'return an integer'
+            result = (utilities.impType() == 4);
+            if (!result) reject("utilities.impType");
+            // Check 'return a string'
+            result = (utilities.impType(true) == "imp004m");
+            if (!result) reject("utilities.impType");
 
             // All tests passed, so resolve
             resolve();
