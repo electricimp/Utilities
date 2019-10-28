@@ -409,11 +409,12 @@ utilities <- {
                 if (t[0] == 0x43) {
                     // Cellular imp
                     t = "1" + t.slice(2);
-                } else if {
+                } else {
                     // imp004m
                     t = "004"
                 }
             }
+
             try {
                 return t.tointeger();
             } catch (err) {
