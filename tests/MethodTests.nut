@@ -149,8 +149,6 @@ class UtilitiesTestCase extends ImpTestCase {
     }
 
     function testIsBST() {
-        // This test fails returns isBST seems to return the opposite of expected
-
         local notBSTDate = { "month" : 10, "year" : 2019, "day" : 28 };
         assertTrue(!utilities.isBST(notBSTDate), "isBST negative failed");
     
