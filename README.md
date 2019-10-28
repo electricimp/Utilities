@@ -352,7 +352,7 @@ server.log(utilities.getNewUUID());
 
 ### utilities.impType(*[returnAString]*) ###
 
-This function returns the type of imp on which your code is running.
+This function returns the type of imp on which your code is running. Agents have a value of zero. Cellular imps are counted from 100, so an impC001 will return the integer 101, not 1, to avoid clashes with other imps, all of which return their correct number.
 
 #### Parameters ####
 
@@ -362,7 +362,7 @@ This function returns the type of imp on which your code is running.
 
 #### Returns ####
 
-Integer or string &mdash; The imp type, eg. 4 or `"imp004m"`; or 0 / "agent".
+Integer or string &mdash; The imp type, eg. 4 or `"imp004m"`; or 0 / "agent"; -1 indicates unknown imp.
 
 #### Examples ####
 
@@ -378,6 +378,7 @@ server.log(utilities.impType(true));
 
 - 3.0.1
     - Fixed an issue causing incorrect BST/DST reporting (mismatch in numeric month values across functions).
+    - Updated *impType()* to deal with cellular imps and remove a deprecated method call.
 - 3.0.0
     - Removed *debugI2C()* function.
     - Added *hexStringToBlob()*, *blobToHexString()*, *binaryToInteger()*, *printBlob()* and *sign()* functions.
