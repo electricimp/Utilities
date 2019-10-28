@@ -406,13 +406,9 @@ utilities <- {
         } else {
             t = t.slice(3);
             if (t.len() == 4) {
-                if (t[0] == 0x43) {
-                    // Cellular imp
-                    t = "1" + t.slice(2);
-                } else {
-                    // imp004m
-                    t = "004"
-                }
+                // It's an imp004m or impC00x; for the latter, numbers
+                // start at 100
+                t = t[0] == 0x43 ? ("1" + t.slice(2)) : "004";
             }
 
             try {
