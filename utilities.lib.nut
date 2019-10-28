@@ -400,12 +400,25 @@ utilities <- {
             return (returnAsString ? "agent" : 0);
         }
 
-        local did = hardware.getdeviceid();
-        local type = ("000" + imp.getmacaddress() == did.slice(1)) ? did.slice(0,1) : "1";
+        local t = imp.info().type;
         if (returnAsString) {
-            return "imp00" + type + ((type == "4") ? "m" : "");
+            return t;
         } else {
-            return type.tointeger();
+            t = t.slice(3);
+            if (t.len() == 4) {
+                if (t[0] == 0x43) {
+                    // Cellular imp
+                    t = "1" + t.slice(2);
+                } else if {
+                    // imp004m
+                    t = "004"
+                }
+            }
+            try {
+                return t.tointeger();
+            } catch (err) {
+                return -1
+            }
         }
     }
 }
