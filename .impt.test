@@ -1,0 +1,14 @@
+{
+  "deviceGroupId": "29b85c66-4db9-75c0-600c-2e7eb15d8355",
+  "deviceGroupName" : "impFarm G",
+  "timeout": 30,
+  "stopOnFail": false,
+  "allowDisconnect": false,
+  "builderCache": false,
+  "testFiles": [
+    "*.test.nut",
+    "tests/**/*.test.nut"
+  ],
+  "agentFile": "utilities.lib.nut",
+  "deviceFile": "utilities.lib.nut"
+}

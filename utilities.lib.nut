@@ -3,7 +3,7 @@
  *
  * @author    Tony Smith (@smittytone)
  * @licence   MIT
- * @version   3.0.0
+ * @version   3.0.1
  *
  * @table
  *
@@ -314,14 +314,17 @@ utilities <- {
         if (n.month == 2) {
             // BST starts on the last Sunday of March
             for (local i = 31 ; i > 24 ; i--) {
-                if (utilities.dayOfWeek(i, 2, n.year) == 0 && n.day >= i) return true;
+                // NOTE 'utilities.dayOfWeek()' uses months in range 1-12, but
+                //       'bstCheck()', like Squirrel date() uses the range 0-11
+                if (utilities.dayOfWeek(i, 3, n.year) == 0 && n.day >= i) return true;
             }
         }
 
         if (n.month == 9) {
             // BST ends on the last Sunday of October
             for (local i = 31 ; i > 24 ; i--) {
-                if (utilities.dayOfWeek(i, 9, n.year) == 0 && n.day < i) return true;
+                // See NOTE above
+                if (utilities.dayOfWeek(i, 10, n.year) == 0 && n.day < i) return true;
             }
         }
         return false;
@@ -347,14 +350,17 @@ utilities <- {
         if (n.month == 2) {
             // DST starts second Sunday in March
             for (local i = 8 ; i < 15 ; i++) {
-                if (utilities.dayOfWeek(i, 2, n.year) == 0 && n.day >= i) return true;
+                // NOTE 'utilities.dayOfWeek()' uses months in range 1-12, but
+                //       'dstCheck()', like Squirrel date() uses the range 0-11
+                if (utilities.dayOfWeek(i, 3, n.year) == 0 && n.day >= i) return true;
             }
         }
 
         if (n.month == 10) {
             // DST ends first Sunday in November
             for (local i = 1 ; i < 8 ; i++) {
-                if (utilities.dayOfWeek(i, 10, n.year) == 0 && n.day <= i) return true;
+                // See NOTE above
+                if (utilities.dayOfWeek(i, 11, n.year) == 0 && n.day <= i) return true;
             }
         }
 
@@ -394,12 +400,22 @@ utilities <- {
             return (returnAsString ? "agent" : 0);
         }
 
-        local did = hardware.getdeviceid();
-        local type = ("000" + imp.getmacaddress() == did.slice(1)) ? did.slice(0,1) : "1";
+        local t = imp.info().type;
         if (returnAsString) {
-            return "imp00" + type + ((type == "4") ? "m" : "");
+            return t;
         } else {
-            return type.tointeger();
+            t = t.slice(3);
+            if (t.len() == 4) {
+                // It's an imp004m or impC00x; for the latter, numbers
+                // start at 100
+                t = t[0] == 0x43 ? ("1" + t.slice(2)) : "004";
+            }
+
+            try {
+                return t.tointeger();
+            } catch (err) {
+                return -1
+            }
         }
     }
 }
