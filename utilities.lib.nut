@@ -28,6 +28,8 @@
  */
 utilities <- {
 
+    "VERSION": "3.0.1",
+
     // ********** Conversion Functions **********
 
     /**
